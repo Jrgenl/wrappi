@@ -63,7 +63,7 @@ You are a senior React Native / Expo + Swift engineer. Build an iOS-first "missi
 - Camera: react-native-vision-camera. Sensors: expo-sensors (Pedometer, Accelerometer).
 - Notifications fallback: expo-notifications with custom bundled sounds (<30s .caf).
 - Native code: a LOCAL Expo module at `modules/alarm-kit` (Swift, Expo Modules API) and a widget/Live Activity target via `@bacons/apple-targets` in `targets/alarm-widget`.
-- App name "Upmate", domain `upmate.no`, URL scheme `upmate`, bundle id `no.upmate.app`. Associated domains: `applinks:upmate.no`, `webcredentials:upmate.no`.
+- App name "Upmate", domain `upmate.no`, URL scheme `upmate`, bundle id `no.upmate.app`, Apple Team ID `H43G8Z9H7V` (Brumio AS), App Group `group.no.upmate.app` shared by the app and the widget extension (`no.upmate.app.widget`). Associated domains: `applinks:upmate.no`, `webcredentials:upmate.no`.
 - Lint/format: eslint (expo config) + prettier. Tests: jest + @testing-library/react-native for pure logic.
 
 ## Architecture
