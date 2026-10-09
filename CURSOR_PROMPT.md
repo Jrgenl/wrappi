@@ -50,6 +50,12 @@ Dere har brukt Expo før, og kan fortsette med det, men da med **development bui
 ```text
 You are a senior React Native / Expo + Swift engineer. Build an iOS-first "mission alarm" app called **Upmate** (get *up* with your *mate*): the alarm only stops once the user completes a wake-up mission (e.g. push-ups verified by camera, photographing the sky, scanning a QR code in the bathroom, solving math). Its key differentiator is the **Wake-up Buddy**: friends who are notified whether you actually got up, can wake you remotely, and share a streak with you. Work in phases, and stop after each phase so I can test on a real device. Don't skip ahead.
 
+## Repository layout (this repo, github.com/Jrgenl/wrappi)
+- `CURSOR_PROMPT.md`: this document.
+- `web/`: the existing upmate.no website (static HTML + one Vercel function `api/aasa.js`). Deployed as the Vercel project `upmate` with Root Directory `web`.
+- `mobile/`: the Expo app (create it here; expo-router's `app/` folder lives inside `mobile/`).
+- `supabase/`: Supabase migrations, RLS policies, seed and Edge Functions.
+
 ## Tech stack (do not deviate without asking)
 - Latest stable Expo SDK, TypeScript strict, expo-router (file-based routing), New Architecture.
 - Development builds via EAS (eas.json with development / preview / production profiles). Never rely on Expo Go.
@@ -71,7 +77,7 @@ You are a senior React Native / Expo + Swift engineer. Build an iOS-first "missi
 - `src/features/missions`: one folder per mission type, each implementing:
   `interface Mission { id; title; icon; difficulty: 1|2|3; requiresPro: boolean; component: React.FC<{ onComplete(): void; onFail?(): void; config }> }`
 - `src/features/paywall`, `src/features/onboarding`, `src/features/stats`, `src/features/buddy`.
-- `supabase/` folder with migrations, RLS policies, seed and Edge Functions (checked in, deployable with the Supabase CLI).
+- `supabase/` at the repo root with migrations, RLS policies, seed and Edge Functions (checked in, deployable with the Supabase CLI).
 - `AlarmScheduler` interface with two implementations, chosen at runtime:
   1. `AlarmKitScheduler` (iOS 26+): calls the native module.
   2. `NotificationScheduler` (iOS 17–25 fallback): schedules a chain of up to ~60 local notifications 30s apart with a loud custom sound, cancelled the moment the mission is completed.
@@ -137,15 +143,26 @@ Purpose: iOS can't block the stop button, so add a social consequence that can't
 - Free tier: 1 alarm, math/QR/shake missions, 1 buddy. Pro: unlimited alarms, camera missions, stats, buddy squads (up to 5).
 
 ## Phases (stop after each one and give me a test checklist)
+0. Accounts, hosting and project setup. You run every CLI command yourself. When a step needs me (browser login, payment, DNS at the registrar, Apple/App Store Connect UI), stop, tell me exactly what to click or paste, and wait for me to say "done". Keep a checklist in `SETUP.md` and tick items off as they are verified.
+   a. Tooling: confirm Node LTS, then use `npx` for `vercel`, `eas-cli`, `supabase` (no global installs needed). Log in: `npx vercel login`, `npx eas-cli login`, `npx supabase login`.
+   b. Website on Vercel: from the repo root run `npx vercel link --project upmate` (create the project if missing; scope = my personal team), set Root Directory to `web` and Framework to "Other", and connect the Git repo `Jrgenl/wrappi` so pushes to `main` deploy. Then `npx vercel --prod`.
+   c. Domain: `npx vercel domains add upmate.no` and `npx vercel domains add www.upmate.no` (www redirects to the apex). Print the exact DNS records Vercel asks for (normally A `@` → 76.76.21.21 and CNAME `www` → cname.vercel-dns.com) and stop so I can add them at my .no registrar. Then poll `npx vercel domains inspect upmate.no` until it is verified and HTTPS works.
+   d. Verify the site: `curl -sI https://upmate.no/.well-known/apple-app-site-association` must return 200, `content-type: application/json` and no redirect, and the body must contain `H43G8Z9H7V.no.upmate.app`. Also check `/invite/TEST`, `/personvern`, `/vilkar`, `/support` return 200. Run Apple's validator: `curl -s https://app-site-association.cdn-apple.com/a/v1/upmate.no` (may take a while to update).
+   e. Apple: the App ID `no.upmate.app` (Team H43G8Z9H7V, Brumio AS) is registered with App Groups, Associated Domains, Push Notifications, Sign in with Apple and Time Sensitive Notifications. Ask me to confirm. Guide me to create the app record in App Store Connect (name "Upmate", primary language Norwegian Bokmål, bundle id `no.upmate.app`, SKU `upmate-ios`), with privacy policy URL https://upmate.no/personvern and support URL https://upmate.no/support. Ask me to create an App Store Connect API key for EAS and store it with `eas credentials` (never commit it).
+   f. Expo: in `mobile/`, `npx create-expo-app@latest . --template` (TypeScript + expo-router), set `owner`, `slug: "upmate"`, `ios.bundleIdentifier: "no.upmate.app"`, `scheme: "upmate"`, `ios.associatedDomains: ["applinks:upmate.no", "webcredentials:upmate.no"]`, then `npx eas-cli init` and `npx eas-cli build:configure`. Let EAS manage certificates, provisioning profiles and capability sync.
+   g. Supabase: create project "upmate" in region eu-north-1 (Stockholm) or another EU region via `npx supabase projects create` (ask me for the org and a DB password, store the password only in my password manager), `npx supabase init` at the repo root, `npx supabase link`. Enable Sign in with Apple in Supabase Auth (guide me through the Services ID / key in the Apple portal). Put `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_ANON_KEY` in EAS env (`npx eas-cli env:create`) and in an ignored `mobile/.env.local`.
+   h. RevenueCat and PostHog: guide me to create the RevenueCat project (iOS app `no.upmate.app`, entitlement `pro`, products to be created in App Store Connect later) and a PostHog project in the EU cloud. Store their public keys in EAS env and `mobile/.env.local`.
+   i. Add `.gitignore` entries for `.env*`, `.vercel`, `supabase/.temp`, and commit everything except secrets. Push to `main`.
 1. Scaffold: Expo app, router, theming, eslint/prettier, EAS config, state + persistence, alarm CRUD UI with mock scheduler.
 2. NotificationScheduler fallback + mission runner + math/shake missions + deep link handling, end to end on device.
 3. Local Expo module with AlarmKit + widget target, runtime switch between schedulers, nag-backup logic.
 4. Camera missions (VisionCamera + Vision helpers): QR, photo, push-ups.
-5. Wake-up Buddy: Supabase project + migrations/RLS, Sign in with Apple, invite links, wake_event sync, Edge Functions (notify-buddies, check-deadlines, poke), push + time-sensitive entitlement, Buddy screen, shared streak. Test with two physical iPhones.
+5. Wake-up Buddy: migrations/RLS on the Supabase project from phase 0, Sign in with Apple, invite links, wake_event sync, Edge Functions (notify-buddies, check-deadlines, poke), push + time-sensitive entitlement, Buddy screen, shared streak. Test with two physical iPhones.
 6. Onboarding funnel (incl. buddy invite step) + RevenueCat paywall + analytics.
 7. Stats/streaks, settings, app icon/splash, App Store prep (privacy manifest PrivacyInfo.xcprivacy, usage strings, screenshots list).
 
 ## Constraints
+- Never print, commit or paste secrets (DB password, service role key, API keys, .p8 files) into chat or files tracked by git.
 - Never reference or copy the "Wayk" name, assets, or copy text. Original branding only.
 - Keep native code minimal and documented. Every native API must be wrapped in a typed TS module with graceful fallback when unsupported.
 - No secrets in the repo. Only the Supabase anon key may ship in the app; the service role key lives in Edge Function secrets. RevenueCat/PostHog/Supabase keys come from `app.config.ts` + EAS env vars.
