@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<title>Upmate mockups</title>
+<style>
+  :root {
+    --bg: #0d0b1a; --card: #1a1730; --card2: #241f42; --text: #f4f2ff; --muted: #a9a3c9;
+    --accent: #ffb547; --accent2: #ff7a59; --ok: #5fd68a; --bad: #ff6b7a; --line: #2e2950;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #e9e6f5; font-family: Inter, -apple-system, sans-serif; color: var(--text); padding: 40px; }
+  .row { display: flex; gap: 40px; flex-wrap: wrap; }
+  .phone { width: 390px; height: 844px; border-radius: 54px; background: var(--bg); position: relative; overflow: hidden;
+           box-shadow: 0 0 0 10px #111, 0 30px 60px rgba(20,10,60,.35); }
+  .status { height: 54px; display: flex; justify-content: space-between; align-items: center; padding: 14px 32px 0; font-weight: 600; font-size: 16px; }
+  .status .icons { font-size: 13px; letter-spacing: 2px; }
+  .island { position: absolute; top: 11px; left: 50%; transform: translateX(-50%); width: 124px; height: 36px; background: #000; border-radius: 20px; z-index: 5; }
+  .home-ind { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; border-radius: 3px; background: rgba(255,255,255,.6); }
+  .pad { padding: 8px 22px; }
+  .label { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; font-weight: 600; }
+  .card { background: var(--card); border-radius: 22px; padding: 18px; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; font-size: 13px; font-weight: 600; }
+  .btn { display: block; text-align: center; border-radius: 18px; padding: 17px; font-weight: 700; font-size: 17px; }
+  .btn.primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #1d1000; }
+  .btn.ghost { background: rgba(255,255,255,.08); color: var(--text); }
+  .logo { font-weight: 800; font-size: 22px; letter-spacing: -.03em; }
+  .logo span { color: var(--accent); }
+  .toggle { width: 51px; height: 31px; border-radius: 16px; background: var(--ok); position: relative; flex: none; }
+  .toggle::after { content: ""; position: absolute; top: 2px; right: 2px; width: 27px; height: 27px; border-radius: 50%; background: #fff; }
+  .toggle.off { background: #3a3560; } .toggle.off::after { right: auto; left: 2px; }
+  .tabbar { position: absolute; bottom: 0; left: 0; right: 0; height: 86px; background: rgba(13,11,26,.92); border-top: 1px solid var(--line);
+            display: flex; justify-content: space-around; padding-top: 10px; font-size: 11px; color: var(--muted); }
+  .tabbar div { text-align: center; } .tabbar .ic { font-size: 22px; display: block; margin-bottom: 2px; filter: grayscale(1) brightness(1.4); }
+  .tabbar .on { color: var(--accent); } .tabbar .on .ic { filter: none; }
+  .caption { width: 390px; text-align: center; margin-top: 22px; color: #2a2450; font-weight: 700; font-size: 18px; }
+  .caption small { display: block; font-weight: 500; font-size: 14px; color: #6a6390; margin-top: 4px; }
+</style>
+</head>
+<body>
+<div class="row">
+
+<!-- 1. Lock screen alarm -->
+<div>
+<div class="phone" id="s1" style="background: radial-gradient(120% 70% at 50% 0%, #4b2b7f 0%, #1b1240 45%, #0d0b1a 100%);">
+  <div class="island"></div>
+  <div class="status"><span></span><span class="icons">▂▄▆ ▮▮▮</span></div>
+  <div style="text-align:center; margin-top: 30px;">
+    <div style="font-size: 20px; font-weight: 600; opacity: .85;">torsdag 10. oktober</div>
+    <div style="font-size: 104px; font-weight: 700; letter-spacing: -4px; line-height: 1.05;">06:30</div>
+  </div>
+  <div style="margin: 70px 18px 0; background: rgba(30,22,60,.75); border-radius: 30px; padding: 22px; backdrop-filter: blur(20px);">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;font-size:24px;">⏰</div>
+      <div><div style="font-weight:700;font-size:17px;">Upmate</div><div style="color:var(--muted);font-size:14px;">God morgen, Jørgen!</div></div>
+    </div>
+    <div style="margin: 18px 0 6px; font-size: 15px; color: var(--muted);">Dagens oppdrag</div>
+    <div style="font-size: 22px; font-weight: 700;">💪 15 pushups</div>
+    <div style="font-size: 14px; color: var(--muted); margin-top: 4px;">Martin får beskjed når du er oppe · frist 06:45</div>
+    <div class="btn primary" style="margin-top: 20px;">Start oppdrag</div>
+  </div>
+  <div style="position:absolute; bottom: 70px; left: 0; right: 0; text-align: center; color: var(--muted); font-size: 14px;">Alarmen stopper når oppdraget er gjort</div>
+  <div class="home-ind"></div>
+</div>
+<div class="caption">1 · Alarmen ringer<small>Ekte systemalarm med AlarmKit, også i lydløs modus</small></div>
+</div>
+
+<!-- 2. Push-up mission -->
+<div>
+<div class="phone" id="s2" style="background: linear-gradient(180deg, #2b2a33 0%, #3d3a46 55%, #1c1b22 100%);">
+  <div class="island"></div>
+  <div class="status"><span>06:31</span><span class="icons">▂▄▆ ▮▮▮</span></div>
+  <!-- floor / body silhouette -->
+  <svg viewBox="0 0 390 844" style="position:absolute; inset:0;" aria-hidden="true">
+    <defs><radialGradient id="glow" cx="50%" cy="60%" r="60%"><stop offset="0" stop-color="#6b5fa8" stop-opacity=".35"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient></defs>
+    <rect width="390" height="844" fill="url(#glow)"/>
+    <rect x="0" y="560" width="390" height="284" fill="#191820"/>
+    <!-- body silhouette in push-up position -->
+    <g fill="#4a4757" opacity=".9">
+      <ellipse cx="300" cy="455" rx="24" ry="22"/>
+      <path d="M110 520 L282 470 L292 492 L118 545 Z"/>
+      <rect x="96" y="520" width="26" height="40" rx="10"/>
+      <path d="M262 478 l12 82 h22 l-10 -88 z"/>
+    </g>
+    <!-- skeleton overlay -->
+    <g stroke="var(--accent)" stroke-width="4" stroke-linecap="round" fill="none">
+      <line x1="300" y1="456" x2="268" y2="478"/>
+      <line x1="268" y1="478" x2="276" y2="520"/>
+      <line x1="276" y1="520" x2="284" y2="560"/>
+      <line x1="268" y1="478" x2="190" y2="500"/>
+      <line x1="190" y1="500" x2="112" y2="532"/>
+      <line x1="112" y1="532" x2="108" y2="560"/>
+    </g>
+    <g fill="#fff" stroke="var(--accent)" stroke-width="3">
+      <circle cx="300" cy="456" r="7"/><circle cx="268" cy="478" r="7"/><circle cx="276" cy="520" r="7"/>
+      <circle cx="284" cy="560" r="7"/><circle cx="190" cy="500" r="7"/><circle cx="112" cy="532" r="7"/><circle cx="108" cy="560" r="7"/>
+    </g>
+  </svg>
+  <div style="position:relative; padding: 6px 22px;">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <span class="pill" style="background: rgba(0,0,0,.45);">🔴 Kamera aktivt · analyseres på telefonen</span>
+    </div>
+    <div style="text-align:center; margin-top: 40px;">
+      <div style="font-size: 16px; font-weight: 600; color: var(--muted);">Pushups</div>
+      <div style="font-size: 120px; font-weight: 800; line-height: 1; letter-spacing: -4px;">7<span style="font-size: 48px; color: var(--muted); letter-spacing: 0;"> / 15</span></div>
+      <div style="margin: 14px auto 0; width: 240px; height: 10px; border-radius: 6px; background: rgba(255,255,255,.15); overflow: hidden;">
+        <div style="width: 47%; height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2));"></div>
+      </div>
+      <div style="margin-top: 12px; font-size: 15px;">Bra! Ned med brystet 👇</div>
+    </div>
+  </div>
+  <div style="position:absolute; bottom: 40px; left: 22px; right: 22px;">
+    <div class="card" style="background: rgba(13,11,26,.85); display:flex; justify-content: space-between; align-items:center;">
+      <div><div style="font-weight:700;">🔊 Alarmen spiller til du er ferdig</div><div style="color:var(--muted); font-size:13px; margin-top:2px;">Klarer det ikke? Hold inne i 60 sek</div></div>
+      <div class="pill" style="background: rgba(255,255,255,.1);">⏱</div>
+    </div>
+  </div>
+  <div class="home-ind"></div>
+</div>
+<div class="caption">2 · Oppdraget<small>Kameraet teller pushups, uten at bilder forlater telefonen</small></div>
+</div>
+
+<!-- 3. Home -->
+<div>
+<div class="phone" id="s3">
+  <div class="island"></div>
+  <div class="status"><span>21:18</span><span class="icons">▂▄▆ ▮▮▮</span></div>
+  <div class="pad" style="display:flex; justify-content:space-between; align-items:center; margin-top: 6px;">
+    <div class="logo">up<span>mate</span></div>
+    <span class="pill" style="background: rgba(255,181,71,.15); color: var(--accent);">🔥 12 dager</span>
+  </div>
+  <div class="pad" style="margin-top: 10px;">
+    <div class="card" style="background: linear-gradient(135deg, #3b2a73, #23194a); padding: 22px;">
+      <div class="label" style="color:#cfc6ff;">Neste alarm</div>
+      <div style="font-size: 64px; font-weight: 800; letter-spacing: -2px; line-height: 1.1;">06:30</div>
+      <div style="color:#cfc6ff;">i morgen · om 9 t 12 min</div>
+      <div style="display:flex; gap:8px; margin-top: 14px;">
+        <span class="pill" style="background: rgba(255,255,255,.12);">💪 15 pushups</span>
+        <span class="pill" style="background: rgba(255,255,255,.12);">🤝 Martin</span>
+      </div>
+    </div>
+  </div>
+  <div class="pad" style="margin-top: 8px;"><div class="label">Alarmer</div></div>
+  <div class="pad" style="display:grid; gap: 10px;">
+    <div class="card" style="display:flex; align-items:center; gap: 14px;">
+      <div style="flex:1;"><div style="font-size: 32px; font-weight: 700;">06:30</div><div style="color:var(--muted); font-size:14px;">Hverdager · 💪 Pushups · frist 06:45</div></div>
+      <div class="toggle"></div>
+    </div>
+    <div class="card" style="display:flex; align-items:center; gap: 14px;">
+      <div style="flex:1;"><div style="font-size: 32px; font-weight: 700;">08:00</div><div style="color:var(--muted); font-size:14px;">Lør, søn · ☁️ Bilde av himmelen</div></div>
+      <div class="toggle"></div>
+    </div>
+    <div class="card" style="display:flex; align-items:center; gap: 14px; opacity: .6;">
+      <div style="flex:1;"><div style="font-size: 32px; font-weight: 700;">05:45</div><div style="color:var(--muted); font-size:14px;">Trening · 🧾 Skann tannkremen</div></div>
+      <div class="toggle off"></div>
+    </div>
+  </div>
+  <div style="position:absolute; right: 22px; bottom: 104px; width: 62px; height: 62px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2)); color:#1d1000; display:grid; place-items:center; font-size: 34px; font-weight: 400; box-shadow: 0 10px 24px rgba(255,140,80,.35);">+</div>
+  <div class="tabbar">
+    <div class="on"><span class="ic">⏰</span>Alarmer</div><div><span class="ic">🤝</span>Buddy</div><div><span class="ic">📊</span>Statistikk</div><div><span class="ic">⚙️</span>Innstillinger</div>
+  </div>
+  <div class="home-ind"></div>
+</div>
+<div class="caption">3 · Hjem<small>Neste alarm, oppdrag og streak</small></div>
+</div>
+
+<!-- 4. Buddy -->
+<div>
+<div class="phone" id="s4">
+  <div class="island"></div>
+  <div class="status"><span>06:47</span><span class="icons">▂▄▆ ▮▮▮</span></div>
+  <div class="pad" style="margin-top: 6px;">
+    <div style="font-size: 32px; font-weight: 800; letter-spacing: -.02em;">Buddy</div>
+    <div style="color: var(--muted);">I dag, torsdag</div>
+  </div>
+  <div class="pad" style="margin-top: 6px;">
+    <div class="card" style="text-align:center; background: linear-gradient(135deg, #3a2414, #2a1830);">
+      <div style="font-size: 44px;">🔥</div>
+      <div style="font-size: 40px; font-weight: 800; line-height: 1.1;">9 dager</div>
+      <div style="color: #ffd9a8;">Felles streak med Martin · rekord 14</div>
+    </div>
+  </div>
+  <div class="pad" style="display:grid; gap: 10px; margin-top: 4px;">
+    <div class="card" style="display:flex; align-items:center; gap: 14px;">
+      <div style="width:50px;height:50px;border-radius:50%;background:#2c2552;display:grid;place-items:center;font-size:26px;">🦊</div>
+      <div style="flex:1;"><div style="font-weight:700; font-size:17px;">Deg</div><div style="color:var(--muted); font-size:14px;">Oppe 06:32 · 15 pushups</div></div>
+      <span class="pill" style="background: rgba(95,214,138,.15); color: var(--ok);">✅ Oppe</span>
+    </div>
+    <div class="card" style="border: 1px solid rgba(255,107,122,.4);">
+      <div style="display:flex; align-items:center; gap: 14px;">
+        <div style="width:50px;height:50px;border-radius:50%;background:#2c2552;display:grid;place-items:center;font-size:26px;">🐻</div>
+        <div style="flex:1;"><div style="font-weight:700; font-size:17px;">Martin</div><div style="color:var(--muted); font-size:14px;">Frist 06:40 · alarm gikk 06:25</div></div>
+        <span class="pill" style="background: rgba(255,107,122,.15); color: var(--bad);">😴 I sengen</span>
+      </div>
+      <div class="btn primary" style="margin-top: 14px;">📣 Vekk Martin</div>
+      <div style="text-align:center; color: var(--muted); font-size: 12px; margin-top: 8px;">Du kan vekke 4 ganger til i dag</div>
+    </div>
+  </div>
+  <div class="pad" style="margin-top: 4px;"><div class="btn ghost">＋ Inviter en buddy</div></div>
+  <div class="tabbar">
+    <div><span class="ic">⏰</span>Alarmer</div><div class="on"><span class="ic">🤝</span>Buddy</div><div><span class="ic">📊</span>Statistikk</div><div><span class="ic">⚙️</span>Innstillinger</div>
+  </div>
+  <div class="home-ind"></div>
+</div>
+<div class="caption">4 · Wake-up Buddy<small>Se om vennen kom seg opp, og vekk dem om ikke</small></div>
+</div>
+
+<!-- 5. Notifications on lock screen -->
+<div>
+<div class="phone" id="s5" style="background: radial-gradient(120% 70% at 50% 0%, #20456b 0%, #121c3a 45%, #0d0b1a 100%);">
+  <div class="island"></div>
+  <div class="status"><span></span><span class="icons">▂▄▆ ▮▮▮</span></div>
+  <div style="text-align:center; margin-top: 30px;">
+    <div style="font-size: 20px; font-weight: 600; opacity: .85;">torsdag 10. oktober</div>
+    <div style="font-size: 104px; font-weight: 700; letter-spacing: -4px; line-height: 1.05;">06:41</div>
+  </div>
+  <div style="margin: 60px 12px 0; display: grid; gap: 10px;">
+    <div style="background: rgba(245,243,255,.9); color: #1a1530; border-radius: 22px; padding: 14px 16px;">
+      <div style="display:flex; gap: 10px; align-items:center; font-size: 13px; color:#5a5480;">
+        <div style="width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;font-size:12px;">⏰</div>
+        <b style="color:#1a1530;">UPMATE</b><span style="margin-left:auto;">nå · Tidssensitiv</span>
+      </div>
+      <div style="font-weight: 700; margin-top: 6px;">Martin ligger fortsatt i sengen 😴</div>
+      <div style="font-size: 15px;">Fristen var 06:40. Vil du vekke Martin?</div>
+      <div style="display:flex; gap: 8px; margin-top: 10px;">
+        <div style="flex:1; text-align:center; background:#1a1530; color:#fff; border-radius: 12px; padding: 10px; font-weight: 700;">📣 Vekk Martin</div>
+        <div style="flex:1; text-align:center; background:rgba(26,21,48,.08); border-radius: 12px; padding: 10px; font-weight: 600;">Senere</div>
+      </div>
+    </div>
+    <div style="background: rgba(245,243,255,.78); color: #1a1530; border-radius: 22px; padding: 14px 16px;">
+      <div style="display:flex; gap: 10px; align-items:center; font-size: 13px; color:#5a5480;">
+        <div style="width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;font-size:12px;">⏰</div>
+        <b style="color:#1a1530;">UPMATE</b><span style="margin-left:auto;">9 min siden</span>
+      </div>
+      <div style="font-weight: 700; margin-top: 6px;">Jørgen er oppe ✅</div>
+      <div style="font-size: 15px;">06:32 · 15 pushups. Streaken deres er på 9 dager 🔥</div>
+    </div>
+  </div>
+  <div class="home-ind"></div>
+</div>
+<div class="caption">5 · Varsler til buddyen<small>«Oppe» eller «i sengen», med knapp for å vekke</small></div>
+</div>
+
+<!-- 6. Paywall -->
+<div>
+<div class="phone" id="s6" style="background: radial-gradient(110% 55% at 50% 0%, #4a2b6e 0%, #0d0b1a 70%);">
+  <div class="island"></div>
+  <div class="status"><span>21:20</span><span class="icons">▂▄▆ ▮▮▮</span></div>
+  <div class="pad" style="text-align:right; color: var(--muted); font-size: 22px;">✕</div>
+  <div class="pad" style="text-align:center;">
+    <div style="font-size: 52px;">☀️</div>
+    <div style="font-size: 30px; font-weight: 800; letter-spacing: -.02em; line-height: 1.15; margin-top: 6px;">Våkn opp hver dag.<br>Ingen unnskyldninger.</div>
+  </div>
+  <div class="pad" style="display:grid; gap: 10px; margin-top: 10px; font-size: 16px;">
+    <div>📸 &nbsp;Kameraoppdrag: pushups, himmel, seng</div>
+    <div>⏰ &nbsp;Ubegrenset antall alarmer</div>
+    <div>🤝 &nbsp;Buddy-gruppe med opptil 5 venner</div>
+    <div>📊 &nbsp;Statistikk og streaks</div>
+  </div>
+  <div class="pad" style="display:grid; gap: 10px; margin-top: 12px;">
+    <div class="card" style="border: 2px solid var(--accent); position: relative;">
+      <span class="pill" style="position:absolute; top:-13px; right:16px; background: var(--accent); color:#1d1000; font-size: 12px;">7 DAGER GRATIS</span>
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div><div style="font-weight:700; font-size:17px;">Årlig</div><div style="color:var(--muted); font-size:14px;">399 kr/år · 33 kr/mnd</div></div>
+        <div style="width:24px;height:24px;border-radius:50%;background:var(--accent);display:grid;place-items:center;color:#1d1000;font-weight:800;font-size:14px;">✓</div>
+      </div>
+    </div>
+    <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
+      <div><div style="font-weight:700; font-size:17px;">Ukentlig</div><div style="color:var(--muted); font-size:14px;">39 kr/uke</div></div>
+      <div style="width:24px;height:24px;border-radius:50%;border:2px solid #4a4570;"></div>
+    </div>
+  </div>
+  <div class="pad" style="margin-top: 8px;">
+    <div class="btn primary">Start gratis prøveperiode</div>
+    <div style="text-align:center; color: var(--muted); font-size: 12px; margin-top: 10px; line-height: 1.5;">Gratis i 7 dager, deretter 399 kr/år. Si opp når som helst<br>i Innstillinger. Gjenopprett kjøp · Vilkår · Personvern</div>
+  </div>
+  <div class="home-ind"></div>
+</div>
+<div class="caption">6 · Betalingsside<small>Gratis prøveperiode, deretter Pro (eksempelpriser)</small></div>
+</div>
+
+</div>
+</body>
+</html>
