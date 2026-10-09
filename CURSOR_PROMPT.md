@@ -1,4 +1,4 @@
-# Wayk-lignende vekkerklokke-app (iOS, Expo): research + Cursor-prompt
+# Upmate: Wayk-lignende vekkerklokke-app (iOS, Expo), research + Cursor-prompt
 
 ## 1. Hva Wayk er
 
@@ -8,6 +8,8 @@
 - **Forretningsmodell:** gratis å laste ned, men full funksjon krever et abonnement etter en gratis prøveperiode. Ifølge en konkurrent koster det rundt $9.99 per måned og $19.99–59.99 per år.
 - **Onboarding:** svært lang, i quiz-stil (rundt 100 skjermer), med paywall til slutt. Appen omsetter rundt $75k i måneden.
 - **Krav:** iOS 17+, og appen er cirka 275 MB, noe som tyder på at ML-modeller er bygd inn i appen.
+
+**Konkurrent å følge med på:** *WakeMate* (Groove Logic, lansert mai 2026) er en sosial alarmapp der venner setter alarmer for hverandre. Den har gratis 1 venn, men ingen oppdrag med kamerasjekk. Upmate skiller seg ut ved å kombinere oppdrag med buddy.
 
 ## 2. Det vanskeligste er å få alarmen til å ringe på iOS
 
@@ -43,10 +45,10 @@ Dere har brukt Expo før, og kan fortsette med det, men da med **development bui
 
 ## 5. Cursor-prompt (lim inn i Cursor Agent)
 
-> Prompten er på engelsk fordi Cursor og kodekommentarer fungerer best slik. Bytt ut `<APPNAVN>`.
+> Prompten er på engelsk fordi Cursor og kodekommentarer fungerer best slik. Appen heter **Upmate**. Bytt ut `<domain>` når dere har kjøpt domenet (f.eks. upmate.app).
 
 ```text
-You are a senior React Native / Expo + Swift engineer. Build an iOS-first "mission alarm" app called <APPNAVN>: the alarm only stops once the user completes a wake-up mission (e.g. push-ups verified by camera, photographing the sky, scanning a QR code in the bathroom, solving math). Its key differentiator is the **Wake-up Buddy**: friends who are notified whether you actually got up, can wake you remotely, and share a streak with you. Work in phases, and stop after each phase so I can test on a real device. Don't skip ahead.
+You are a senior React Native / Expo + Swift engineer. Build an iOS-first "mission alarm" app called **Upmate** (get *up* with your *mate*): the alarm only stops once the user completes a wake-up mission (e.g. push-ups verified by camera, photographing the sky, scanning a QR code in the bathroom, solving math). Its key differentiator is the **Wake-up Buddy**: friends who are notified whether you actually got up, can wake you remotely, and share a streak with you. Work in phases, and stop after each phase so I can test on a real device. Don't skip ahead.
 
 ## Tech stack (do not deviate without asking)
 - Latest stable Expo SDK, TypeScript strict, expo-router (file-based routing), New Architecture.
@@ -61,6 +63,7 @@ You are a senior React Native / Expo + Swift engineer. Build an iOS-first "missi
 - Camera: react-native-vision-camera. Sensors: expo-sensors (Pedometer, Accelerometer).
 - Notifications fallback: expo-notifications with custom bundled sounds (<30s .caf).
 - Native code: a LOCAL Expo module at `modules/alarm-kit` (Swift, Expo Modules API) and a widget/Live Activity target via `@bacons/apple-targets` in `targets/alarm-widget`.
+- App name "Upmate", URL scheme `upmate`, bundle id `com.<team>.upmate`.
 - Lint/format: eslint (expo config) + prettier. Tests: jest + @testing-library/react-native for pure logic.
 
 ## Architecture
@@ -81,7 +84,7 @@ You are a senior React Native / Expo + Swift engineer. Build an iOS-first "missi
   `scheduleOneOff({ id, date, ... })`, `cancel(id)`, `listScheduled()`,
   and an event `onAlarmStateChange({ id, state: 'scheduled'|'countdown'|'paused'|'alerting' })` backed by `AlarmManager.shared.alarmUpdates`.
 - Use `AlarmManager.AlarmConfiguration` with `AlarmPresentation.Alert` (stop button labelled "Start mission").
-- The stop intent must be an AppIntent with `openAppWhenRun = true` that deep-links to `<scheme>://mission/<alarmId>`. Also add a secondary snooze button only if the alarm allows snooze.
+- The stop intent must be an AppIntent with `openAppWhenRun = true` that deep-links to `upmate://mission/<alarmId>`. Also add a secondary snooze button only if the alarm allows snooze.
 - Verify every AlarmKit API name against the iOS 26 SDK in Xcode before using it (`stopIntent`/`secondaryIntent` vs `secondaryButtonBehavior`). Don't guess.
 - Also add a Swift `VisionHelper` in the same module:
   `classifyImage(uri) -> [{label, confidence}]` (VNClassifyImageRequest),
