@@ -47,7 +47,7 @@ Dere har brukt Expo før, og kan fortsette med det, men da med **development bui
 
 > Prompten er på engelsk fordi Cursor og kodekommentarer fungerer best slik. Appen heter **Upmate**, og domenet er **upmate.no**.
 
-```text
+````text
 You are a senior React Native / Expo + Swift engineer. Build an iOS-first "mission alarm" app called **Upmate** (get *up* with your *mate*): the alarm only stops once the user completes a wake-up mission (e.g. push-ups verified by camera, photographing the sky, scanning a QR code in the bathroom, solving math). Its key differentiator is the **Wake-up Buddy**: friends who are notified whether you actually got up, can wake you remotely, and share a streak with you. Work in phases, and stop after each phase so I can test on a real device. Don't skip ahead.
 
 This prompt is self-contained: everything you need (product, website, app, backend, accounts and launch setup) is below. If the repo is empty, create everything. If parts already exist (e.g. `web/`), keep them and only fill gaps.
@@ -207,7 +207,7 @@ Purpose: iOS can't block the stop button, so add a social consequence that can't
 - Privacy policy, terms and support pages already exist at https://upmate.no/personvern, /vilkar and /support. Link to them from Settings and the paywall. If you change what data is collected, update `web/personvern.html` too.
 - All user-facing copy in Norwegian Bokmål and English via i18n files; no hard-coded strings in components.
 - Write a README with how to run a dev build on a physical iPhone and how to test alarms quickly.
-```
+````
 
 ## Kilder
 - Wayk-oppføring og -data: [screensdesign.com](https://screensdesign.com/apps/wayk-alarm-clock-to-wake-up/), [AppBrain](https://www.appbrain.com/appstore/wayk-alarm-clock-to-wake-up/ios-6758021281), [mwm.ai](https://mwm.ai/apps/wayk-wake-up-early/6758021281), [Google Play](https://play.google.com/store/apps/details?id=mg.WaykUp&hl=en_US), [Mornio-anmeldelse (konkurrent)](https://mornioapp.com/guides/wayk-review)
