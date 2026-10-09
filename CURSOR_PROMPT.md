@@ -9,7 +9,7 @@
 - **Onboarding:** svært lang, i quiz-stil (rundt 100 skjermer), med paywall til slutt. Appen omsetter rundt $75k i måneden.
 - **Krav:** iOS 17+, og appen er cirka 275 MB, noe som tyder på at ML-modeller er bygd inn i appen.
 
-**Konkurrent å følge med på:** *WakeMate* (Groove Logic, lansert mai 2026) er en sosial alarmapp der venner setter alarmer for hverandre. Den har gratis 1 venn, men ingen oppdrag med kamerasjekk. Upmate skiller seg ut ved å kombinere oppdrag med buddy.
+**Konkurrent å følge med på:** *WakeMate* (Groove Logic, lansert mai 2026) er en sosial alarmapp der venner setter alarmer for hverandre. Den har gratis 1 venn, akkurat som Upmate. Sjekk om den har oppdrag med kamerasjekk. Hvis ikke, er kombinasjonen oppdrag + buddy det som skiller Upmate ut.
 
 ## 2. Det vanskeligste er å få alarmen til å ringe på iOS
 
