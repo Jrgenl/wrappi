@@ -45,7 +45,7 @@ Dere har brukt Expo før, og kan fortsette med det, men da med **development bui
 
 ## 5. Cursor-prompt (lim inn i Cursor Agent)
 
-> Prompten er på engelsk fordi Cursor og kodekommentarer fungerer best slik. Appen heter **Upmate**. Bytt ut `<domain>` når dere har kjøpt domenet (f.eks. upmate.app).
+> Prompten er på engelsk fordi Cursor og kodekommentarer fungerer best slik. Appen heter **Upmate**, og domenet er **upmate.no**.
 
 ```text
 You are a senior React Native / Expo + Swift engineer. Build an iOS-first "mission alarm" app called **Upmate** (get *up* with your *mate*): the alarm only stops once the user completes a wake-up mission (e.g. push-ups verified by camera, photographing the sky, scanning a QR code in the bathroom, solving math). Its key differentiator is the **Wake-up Buddy**: friends who are notified whether you actually got up, can wake you remotely, and share a streak with you. Work in phases, and stop after each phase so I can test on a real device. Don't skip ahead.
@@ -63,7 +63,7 @@ You are a senior React Native / Expo + Swift engineer. Build an iOS-first "missi
 - Camera: react-native-vision-camera. Sensors: expo-sensors (Pedometer, Accelerometer).
 - Notifications fallback: expo-notifications with custom bundled sounds (<30s .caf).
 - Native code: a LOCAL Expo module at `modules/alarm-kit` (Swift, Expo Modules API) and a widget/Live Activity target via `@bacons/apple-targets` in `targets/alarm-widget`.
-- App name "Upmate", URL scheme `upmate`, bundle id `com.<team>.upmate`.
+- App name "Upmate", domain `upmate.no`, URL scheme `upmate`, bundle id `com.<team>.upmate`.
 - Lint/format: eslint (expo config) + prettier. Tests: jest + @testing-library/react-native for pure logic.
 
 ## Architecture
@@ -113,7 +113,7 @@ Purpose: iOS can't block the stop button, so add a social consequence that can't
   - `buddy_pairs(id, user_a, user_b, status: pending|active, created_at)`. Free: 1 active buddy. Pro: up to 5 (a "squad").
   - `wake_events(id, user_id, alarm_id, scheduled_for, deadline, fired_at, completed_at, mission_type, mission_summary, status: pending|done|missed|excused)`
   - `buddy_streaks(pair_id, current, best, last_success_date)`
-- Pairing: invite via universal link `https://<domain>/invite/<code>` or QR (expo-linking + associated domains). Accepting creates an active pair. Buddies can be removed instantly from Settings.
+- Pairing: invite via universal link `https://upmate.no/invite/<code>` or QR (expo-linking + associated domains `applinks:upmate.no`). Host `https://upmate.no/.well-known/apple-app-site-association` (served as application/json, no redirect) and a simple fallback web page at `/invite/<code>` that links to the App Store when the app isn't installed. Accepting creates an active pair. Buddies can be removed instantly from Settings.
 - Deadline: per alarm, an optional "Be up by" time (default alarm time + 15 min). When the alarm is scheduled for the day, insert a `pending` wake_event with that deadline.
 - On mission complete: mark the event `done`. The Edge Function `notify-buddies` pushes "<name> is up ✅ 06:32 · 15 push-ups" to buddies.
 - Missed: a pg_cron job every minute runs `check-deadlines`, marks overdue events as `missed` and pushes "<name> is still in bed 😴" to buddies with a "Wake them up" action button (notification category).
