@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bli med i Upmate</title>
+<meta name="description" content="Du er invitert til å bli wake-up buddy i Upmate.">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<main>
+<a class="logo" href="/">up<span>mate</span></a>
+<h1>Du er invitert 🤝</h1>
+<p class="lead">En venn vil ha deg som wake-up buddy i Upmate: dere ser om hverandre kom dere opp, og deler en streak.</p>
+<div class="card">Invitasjonskode<br><span class="code" id="code">–</span></div>
+<p>Har du Upmate installert, åpnes invitasjonen i appen når du trykker på lenken. Hvis ikke: last ned appen, og legg inn koden over.</p>
+<p><a class="btn" id="store" href="/">Last ned Upmate</a></p>
+<p id="soon" style="color:var(--muted)">Upmate kommer snart til App Store.</p>
+<script>
+  // Set APP_STORE_URL once the app is live, e.g. https://apps.apple.com/app/id1234567890
+  var APP_STORE_URL = '';
+  var code = decodeURIComponent((location.pathname.split('/invite/')[1] || '').split('/')[0]);
+  if (code) document.getElementById('code').textContent = code.toUpperCase();
+  if (APP_STORE_URL) { document.getElementById('store').href = APP_STORE_URL; document.getElementById('soon').hidden = true; }
+</script>
+<footer><a href="/">Upmate</a><a href="/personvern">Personvern</a><a href="/vilkar">Vilkår</a><a href="/support">Support</a></footer></main></body></html>

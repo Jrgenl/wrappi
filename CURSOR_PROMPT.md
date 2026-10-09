@@ -63,7 +63,7 @@ You are a senior React Native / Expo + Swift engineer. Build an iOS-first "missi
 - Camera: react-native-vision-camera. Sensors: expo-sensors (Pedometer, Accelerometer).
 - Notifications fallback: expo-notifications with custom bundled sounds (<30s .caf).
 - Native code: a LOCAL Expo module at `modules/alarm-kit` (Swift, Expo Modules API) and a widget/Live Activity target via `@bacons/apple-targets` in `targets/alarm-widget`.
-- App name "Upmate", domain `upmate.no`, URL scheme `upmate`, bundle id `com.<team>.upmate`.
+- App name "Upmate", domain `upmate.no`, URL scheme `upmate`, bundle id `no.upmate.app`. Associated domains: `applinks:upmate.no`, `webcredentials:upmate.no`.
 - Lint/format: eslint (expo config) + prettier. Tests: jest + @testing-library/react-native for pure logic.
 
 ## Architecture
@@ -113,7 +113,7 @@ Purpose: iOS can't block the stop button, so add a social consequence that can't
   - `buddy_pairs(id, user_a, user_b, status: pending|active, created_at)`. Free: 1 active buddy. Pro: up to 5 (a "squad").
   - `wake_events(id, user_id, alarm_id, scheduled_for, deadline, fired_at, completed_at, mission_type, mission_summary, status: pending|done|missed|excused)`
   - `buddy_streaks(pair_id, current, best, last_success_date)`
-- Pairing: invite via universal link `https://upmate.no/invite/<code>` or QR (expo-linking + associated domains `applinks:upmate.no`). Host `https://upmate.no/.well-known/apple-app-site-association` (served as application/json, no redirect) and a simple fallback web page at `/invite/<code>` that links to the App Store when the app isn't installed. Accepting creates an active pair. Buddies can be removed instantly from Settings.
+- Pairing: invite via universal link `https://upmate.no/invite/<code>` or QR (expo-linking + associated domains `applinks:upmate.no`). The website (`web/` in this repo, deployed on Vercel) already serves `https://upmate.no/.well-known/apple-app-site-association` for `/invite/*` and a fallback page at `/invite/<code>`. Don't rebuild it; only make the app handle `https://upmate.no/invite/<code>` and the `upmate://invite/<code>` scheme. Accepting creates an active pair. Buddies can be removed instantly from Settings.
 - Deadline: per alarm, an optional "Be up by" time (default alarm time + 15 min). When the alarm is scheduled for the day, insert a `pending` wake_event with that deadline.
 - On mission complete: mark the event `done`. The Edge Function `notify-buddies` pushes "<name> is up ✅ 06:32 · 15 push-ups" to buddies.
 - Missed: a pg_cron job every minute runs `check-deadlines`, marks overdue events as `missed` and pushes "<name> is still in bed 😴" to buddies with a "Wake them up" action button (notification category).
@@ -149,6 +149,7 @@ Purpose: iOS can't block the stop button, so add a social consequence that can't
 - Never reference or copy the "Wayk" name, assets, or copy text. Original branding only.
 - Keep native code minimal and documented. Every native API must be wrapped in a typed TS module with graceful fallback when unsupported.
 - No secrets in the repo. Only the Supabase anon key may ship in the app; the service role key lives in Edge Function secrets. RevenueCat/PostHog/Supabase keys come from `app.config.ts` + EAS env vars.
+- Privacy policy, terms and support pages already exist at https://upmate.no/personvern, /vilkar and /support. Link to them from Settings and the paywall. If you change what data is collected, update `web/personvern.html` too.
 - Write a README with how to run a dev build on a physical iPhone and how to test alarms quickly.
 ```
 

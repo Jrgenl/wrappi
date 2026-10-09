@@ -1,0 +1,8 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/.well-known/apple-app-site-association", "destination": "/api/aasa" },
+    { "source": "/apple-app-site-association", "destination": "/api/aasa" },
+    { "source": "/invite/:code", "destination": "/invite" }
+  ]
+}
