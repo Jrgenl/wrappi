@@ -50,11 +50,49 @@ Dere har brukt Expo før, og kan fortsette med det, men da med **development bui
 ```text
 You are a senior React Native / Expo + Swift engineer. Build an iOS-first "mission alarm" app called **Upmate** (get *up* with your *mate*): the alarm only stops once the user completes a wake-up mission (e.g. push-ups verified by camera, photographing the sky, scanning a QR code in the bathroom, solving math). Its key differentiator is the **Wake-up Buddy**: friends who are notified whether you actually got up, can wake you remotely, and share a streak with you. Work in phases, and stop after each phase so I can test on a real device. Don't skip ahead.
 
-## Repository layout (this repo, github.com/Jrgenl/wrappi)
+This prompt is self-contained: everything you need (product, website, app, backend, accounts and launch setup) is below. If the repo is empty, create everything. If parts already exist (e.g. `web/`), keep them and only fill gaps.
+
+## Product context
+- Problem: people snooze or turn off the alarm half-asleep and fall back asleep.
+- Inspiration/competitor: "Wayk: Alarm Clock to Wake Up" (Dialed Labs) – mission alarm (push-ups, make the bed, photograph the sky), subscription with free trial, very long quiz-style onboarding ending in a paywall, iOS 17+. Reportedly ~$75k/month. Users complain about the mandatory subscription and missions that fail to register. It has no social features.
+- Other competitor: "WakeMate" (Groove Logic, May 2026) – friends set alarms for each other, free with 1 friend. Upmate's edge is combining verified missions with the Buddy accountability loop.
+- Owner: Brumio AS (Norway). Primary market Norway/Scandinavia, then English-speaking markets. Ship Norwegian Bokmål and English localizations from day one (expo-localization + i18n JSON files; Norwegian is the default copy).
+- iOS reality you must design around: third-party apps can't block the alarm's stop button. AlarmKit (iOS 26+) gives real system alarms that ring through Silent/Focus; on iOS 17–25 only chained local notifications (≤30 s sound each, no ringing in Silent mode) are possible. Critical Alerts entitlement is not realistic for this app.
+
+## Repository layout (github.com/Jrgenl/wrappi, or a new empty repo)
 - `CURSOR_PROMPT.md`: this document.
-- `web/`: the existing upmate.no website (static HTML + one Vercel function `api/aasa.js`). Deployed as the Vercel project `upmate` with Root Directory `web`.
+- `web/`: the upmate.no website (static HTML + one Vercel function `api/aasa.js`), see "Website" below. Deployed as the Vercel project `upmate` with Root Directory `web`.
 - `mobile/`: the Expo app (create it here; expo-router's `app/` folder lives inside `mobile/`).
 - `supabase/`: Supabase migrations, RLS policies, seed and Edge Functions.
+
+## Website (`web/`, Norwegian, deployed on Vercel at https://upmate.no)
+Plain HTML + one CSS file, no framework, no build step. Dark design matching the app (background #0d0b1a, cards #1a1730, text #f4f2ff, muted #a9a3c9, accent #ffb547), system font, mobile-first, max-width 680px. Shared footer linking Upmate / Personvern / Vilkår / Support. Contact address everywhere: kontakt@upmate.no.
+- `vercel.json`:
+  ```json
+  { "cleanUrls": true,
+    "rewrites": [
+      { "source": "/.well-known/apple-app-site-association", "destination": "/api/aasa" },
+      { "source": "/apple-app-site-association", "destination": "/api/aasa" },
+      { "source": "/invite/:code", "destination": "/invite" } ] }
+  ```
+- `api/aasa.js` (must return 200, `application/json`, no redirect):
+  ```js
+  const BUNDLE_ID = process.env.APPLE_BUNDLE_ID || 'no.upmate.app';
+  module.exports = (req, res) => {
+    const appID = `${process.env.APPLE_TEAM_ID || 'H43G8Z9H7V'}.${BUNDLE_ID}`;
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    res.status(200).send(JSON.stringify({
+      applinks: { details: [{ appIDs: [appID], components: [{ '/': '/invite/*', comment: 'Buddy invites' }] }] },
+      webcredentials: { apps: [appID] },
+    }));
+  };
+  ```
+- `index.html`: headline "Stå opp. Sammen.", one-line pitch, three cards (missions that can't be cheated, verified on-device / Wake-up Buddy / your photos never leave the phone), "Kommer snart til iPhone" (later an App Store badge).
+- `invite.html`: "Du er invitert 🤝", explains Buddy, shows the invite code parsed from `/invite/<code>` (uppercase), a "Last ned Upmate" button driven by an `APP_STORE_URL` constant (show "kommer snart" while empty).
+- `personvern.html` (GDPR privacy policy, controller Brumio AS): no account = all data stays on device; camera/motion analysed on device, photos never uploaded; with Buddy (Sign in with Apple): profile (display name, emoji avatar, timezone, push token), wake events (scheduled time, deadline, fired/completed time, mission type, status) shared only with chosen buddies, buddy links; legal basis GDPR art. 6(1)(b); processors Supabase (EU), Expo/APNs, RevenueCat, PostHog (EU, anonymised); in-app account deletion removes all server data; rights incl. complaint to Datatilsynet.
+- `vilkar.html` (terms): provided by Brumio AS; auto-renewing subscription via Apple, trial converts unless cancelled ≥24 h before end, manage in Settings → Apple ID → Subscriptions; alarm reliability disclaimer (don't rely on it as the only alarm when it's critical); no abuse of "Wake them up", accounts can be blocked.
+- `support.html`: FAQ cards – alarm doesn't ring (permissions, iOS 26 vs older + silent switch), mission not accepted (light, framing, "Klarer det ikke" button), invite link doesn't open the app (update, enter code manually), subscription (cancel, restore purchases).
 
 ## Tech stack (do not deviate without asking)
 - Latest stable Expo SDK, TypeScript strict, expo-router (file-based routing), New Architecture.
@@ -145,7 +183,7 @@ Purpose: iOS can't block the stop button, so add a social consequence that can't
 ## Phases (stop after each one and give me a test checklist)
 0. Accounts, hosting and project setup. You run every CLI command yourself. When a step needs me (browser login, payment, DNS at the registrar, Apple/App Store Connect UI), stop, tell me exactly what to click or paste, and wait for me to say "done". Keep a checklist in `SETUP.md` and tick items off as they are verified.
    a. Tooling: confirm Node LTS, then use `npx` for `vercel`, `eas-cli`, `supabase` (no global installs needed). Log in: `npx vercel login`, `npx eas-cli login`, `npx supabase login`.
-   b. Website on Vercel: from the repo root run `npx vercel link --project upmate` (create the project if missing; scope = my personal team), set Root Directory to `web` and Framework to "Other", and connect the Git repo `Jrgenl/wrappi` so pushes to `main` deploy. Then `npx vercel --prod`.
+   b. Website on Vercel: create `web/` as specified above if it doesn't exist, commit it, then from the repo root run `npx vercel link --project upmate` (create the project if missing; scope = my personal team), set Root Directory to `web` and Framework to "Other", and connect the Git repo `Jrgenl/wrappi` so pushes to `main` deploy. Then `npx vercel --prod`.
    c. Domain: `npx vercel domains add upmate.no` and `npx vercel domains add www.upmate.no` (www redirects to the apex). Print the exact DNS records Vercel asks for (normally A `@` → 76.76.21.21 and CNAME `www` → cname.vercel-dns.com) and stop so I can add them at my .no registrar. Then poll `npx vercel domains inspect upmate.no` until it is verified and HTTPS works.
    d. Verify the site: `curl -sI https://upmate.no/.well-known/apple-app-site-association` must return 200, `content-type: application/json` and no redirect, and the body must contain `H43G8Z9H7V.no.upmate.app`. Also check `/invite/TEST`, `/personvern`, `/vilkar`, `/support` return 200. Run Apple's validator: `curl -s https://app-site-association.cdn-apple.com/a/v1/upmate.no` (may take a while to update).
    e. Apple: the App ID `no.upmate.app` (Team H43G8Z9H7V, Brumio AS) is registered with App Groups, Associated Domains, Push Notifications, Sign in with Apple and Time Sensitive Notifications. Ask me to confirm. Guide me to create the app record in App Store Connect (name "Upmate", primary language Norwegian Bokmål, bundle id `no.upmate.app`, SKU `upmate-ios`), with privacy policy URL https://upmate.no/personvern and support URL https://upmate.no/support. Ask me to create an App Store Connect API key for EAS and store it with `eas credentials` (never commit it).
@@ -167,6 +205,7 @@ Purpose: iOS can't block the stop button, so add a social consequence that can't
 - Keep native code minimal and documented. Every native API must be wrapped in a typed TS module with graceful fallback when unsupported.
 - No secrets in the repo. Only the Supabase anon key may ship in the app; the service role key lives in Edge Function secrets. RevenueCat/PostHog/Supabase keys come from `app.config.ts` + EAS env vars.
 - Privacy policy, terms and support pages already exist at https://upmate.no/personvern, /vilkar and /support. Link to them from Settings and the paywall. If you change what data is collected, update `web/personvern.html` too.
+- All user-facing copy in Norwegian Bokmål and English via i18n files; no hard-coded strings in components.
 - Write a README with how to run a dev build on a physical iPhone and how to test alarms quickly.
 ```
 
